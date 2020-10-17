@@ -1,0 +1,38 @@
+.box {
+  margin: auto;
+  width: 100px;
+  height: 200px;
+  background-color: #fa923f;
+  display: none;
+}
+
+.box.visible {
+  display: block;
+}
+
+.navbar {
+  background-color: #53af80;
+}
+
+.floating-button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 2rem;
+  z-index: 2;
+}
+
+.floating-button button.mdl-button--fab.mdl-button--colored {
+  background-color: #53af80; 
+}
+
+.card {
+  margin: 2rem auto;
+}
+
+.card .title-wrapper {
+  background-image: url(/src/images/monterey.jpg);
+  background-size: cover;
+  height: 180px;
+  color: #fff;
+}

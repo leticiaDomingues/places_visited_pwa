@@ -1,0 +1,60 @@
+{
+    "name": "Places Visited",
+    "short_name": "Places",
+    "start_url": "/index.html",
+    "scope": ".",
+    "display": "standalone",
+    "background_color": "#ff75d3",
+    "theme_color": "#ff75d3",
+    "description": "Places visited",
+    "dir": "ltr",
+    "lang": "en-US",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/src/images/icons/app-icon-16x16.png",
+            "type": "image/png",
+            "sizes": "16x16"
+        },
+        {
+            "src": "/src/images/icons/app-icon-20x20.png",
+            "type": "image/png",
+            "sizes": "20x20"
+        },
+        {
+            "src": "/src/images/icons/app-icon-24x24.png",
+            "type": "image/png",
+            "sizes": "24x24"
+        },
+        {
+            "src": "/src/images/icons/app-icon-32x32.png",
+            "type": "image/png",
+            "sizes": "32x32"
+        },
+        {
+            "src": "/src/images/icons/app-icon-48x48.png",
+            "type": "image/png",
+            "sizes": "48x48"
+        },
+        {
+            "src": "/src/images/icons/app-icon-64x64.png",
+            "type": "image/png",
+            "sizes": "64x64"
+        },
+        {
+            "src": "/src/images/icons/app-icon-128x128.png",
+            "type": "image/png",
+            "sizes": "128x128"
+        },
+        {
+            "src": "/src/images/icons/app-icon-256x256.png",
+            "type": "image/png",
+            "sizes": "256x256"
+        },
+        {
+            "src": "/src/images/icons/app-icon-512x512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ]
+}

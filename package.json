@@ -1,0 +1,12 @@
+{
+  "name": "places-visited",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server -c-1"
+  },
+  "author": "Letícia Domingues",
+  "devDependencies": {
+    "http-server": "^0.12.3"
+  }
+}
