@@ -5,9 +5,12 @@ const CACHE_DYNAMIC_NAME = 'DynamicCache_v1';
 // Static files of the application that will be added to the static cache
 const staticFiles = [ '/',
                       '/index.html',
+                      '/src/offline.html',
                       '/src/css/app.css',
                       '/src/css/main.css',
+                      '/src/css/offline.css',
                       '/main.js',
+                      '/src/js/places.js',
                       '/src/js/material.min.js',
                       'https://fonts.googleapis.com/css?family=Roboto:400,700',
                       'https://fonts.googleapis.com/icon?family=Material+Icons',
@@ -45,7 +48,13 @@ self.addEventListener('fetch', (event) => {
                     cache.put(event.request.url, res.clone());
                     return res;
                 })
-            }).catch(err => {});
+            }).catch(() => {
+              return caches.open(CACHE_STATIC_NAME).then(cache => {
+                if (event.request.headers.get('accept').includes('text/html')) {
+                  return cache.match('/src/offline.html');
+                }
+              });
+            });
     })
   );
 });

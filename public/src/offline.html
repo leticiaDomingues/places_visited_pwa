@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css">
   <link rel="stylesheet" href="/src/css/app.css">
   <link rel="stylesheet" href="/src/css/main.css">
+  <link rel="stylesheet" href="/src/css/offline.css">
   <link rel="icon" href="/src/images/icons/favicon.ico" type="image/x-icon"/>
 </head>
 <body>
@@ -44,19 +45,14 @@
 
       <!-- Main Area -->
       <main class="mdl-layout__content mat-typography">
-        <!-- Area where cards will be added to -->
-        <div id="places-area" class="places-area"></div>
-        <!-- Add new place floating button -->
-        <div class="floating-button">
-          <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" id="add-place-button">
-            <i class="material-icons">add</i>
-          </button>
+        <div class="offline">
+            <h5 class="text-center mdl-color-text--primary">Oops, this page hasn't been cached yet :(</h5>
+            <p>Try getting online or accessing the <a href="/index.html">main page</a>.</p>
         </div>
       </main>
     </div>
   </div>
   <script defer src="/src/js/material.min.js"></script>
   <script src="/main.js"></script>
-  <script src="/src/js/places.js"></script>
 </body>
 </html>
