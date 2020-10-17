@@ -1,21 +1,9 @@
-.box {
-  margin: auto;
-  width: 100px;
-  height: 200px;
-  background-color: #fa923f;
-  display: none;
-}
-
-.box.visible {
-  display: block;
-}
-
 .navbar {
   background-color: #53af80;
 }
 
 .floating-button {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   right: 0;
   margin: 2rem;
@@ -26,12 +14,25 @@
   background-color: #53af80; 
 }
 
+.places-area {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+@media screen and (min-width: 1024px) {
+  .places-area {
+    flex-direction: row;
+  }
+}
+
 .card {
-  margin: 2rem auto;
+  margin: 2rem;
 }
 
 .card .title-wrapper {
-  background-image: url(/src/images/monterey.jpg);
   background-size: cover;
   height: 180px;
   color: #fff;
