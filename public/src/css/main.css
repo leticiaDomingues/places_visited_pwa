@@ -28,6 +28,12 @@
   }
 }
 
+@media screen and (max-width: 405px) {
+  .card {
+    max-width: 82%;
+  }
+}
+
 .card {
   margin: 2rem;
 }

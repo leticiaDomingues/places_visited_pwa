@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css">
   <link rel="stylesheet" href="/src/css/app.css">
   <link rel="stylesheet" href="/src/css/main.css">
+  <link rel="stylesheet" href="/src/css/new-place.css">
   <link rel="icon" href="/src/images/icons/favicon.ico" type="image/x-icon"/>
 </head>
 <body>
@@ -44,19 +45,41 @@
 
       <!-- Main Area -->
       <main class="mdl-layout__content mat-typography">
-        <!-- Area where cards will be added to -->
-        <div id="places-area" class="places-area"></div>
-        <!-- Add new place floating button -->
-        <div class="floating-button">
-          <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" id="add-place-button">
-            <i class="material-icons">add</i>
-          </button>
+        <div class="new-place">
+          <h5 class="text-center mdl-color-text--primary">New place</h5>
+          <form>
+            <!-- Place title -->
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input class="mdl-textfield__input" type="text" id="placeTitle">
+              <label class="mdl-textfield__label" for="placeTitle">Place title</label>
+            </div>
+            <!-- Place description-->
+            <div class="mdl-textfield mdl-js-textfield">
+              <textarea class="mdl-textfield__input" type="text" rows= "3" id="placeDescription" ></textarea>
+              <label class="mdl-textfield__label" for="placeDescription">Place description</label>
+            </div>
+            <!-- Place image -->
+            <img id="imagePreview" src="/src/images/placeholder.png"/>
+            <Label class="input-custom-file mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
+              Place image
+              <input type="file" onchange="changeImage(this)">
+            </label>
+            <!-- Add new place button -->
+            <button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent new-place-button" onclick="addNewPlace()">
+              Save
+            </button>
+          </form>
         </div>
       </main>
     </div>
   </div>
+  <!-- Snackbar -->
+  <div id="snackbar" class="mdl-js-snackbar mdl-snackbar">
+    <div class="mdl-snackbar__text"></div>
+    <button class="mdl-snackbar__action" type="button"></button>
+  </div>
   <script defer src="/src/js/material.min.js"></script>
   <script src="/main.js"></script>
-  <script src="/src/js/places.js"></script>
+  <script src="/src/js/new-place.js"></script>
 </body>
 </html>

@@ -1,0 +1,31 @@
+.new-place {
+    font-family: Roboto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: 2rem;    
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+button.mdl-button--accent.mdl-button--accent.mdl-button--raised {
+    background-color: #53af80;
+}
+
+label.input-custom-file input[type=file] {
+    display: none;
+}
+
+#imagePreview {
+    width: 70%;
+    margin: auto;
+    margin-bottom: 1rem;
+}
+
+.new-place-button {
+    margin-top: 2rem;
+}
