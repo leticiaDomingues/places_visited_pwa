@@ -37,7 +37,7 @@ function fetchPlacesUsingCacheThenNetworkStrategy() {
       });
 
   if ('indexedDB' in window) {
-    readAllItemsFromDatabase(PLACES_STORE_NAME).then(data => {
+    readAllItemsFromLocalDatabase(PLACES_STORE_NAME).then(data => {
       if(!networkDataReceived) {
         console.log('From idb: ', data);
         places = data;
@@ -80,15 +80,9 @@ function createNewPlaceCard(place) {
   placesArea.appendChild(cardSection);
 }
 
-// Add a new place to places array and then add a new card for it
-function addNewPlace() {
-  const newPlace = {
-      title: "Monterey Bay",
-      description: "Monterey Bay Aquarium was fun!",
-      image: "/src/images/monterey.jpg"
-  };
-  places.push(newPlace);
-  createNewPlaceCard(newPlace);
+// Redirect user to the "new place" page
+function goToNewPlacePage() {
+  window.location = "/src/new.html";
 };
 
 fetchPlacesUsingCacheThenNetworkStrategy();

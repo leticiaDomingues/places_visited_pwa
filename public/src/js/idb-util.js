@@ -1,4 +1,4 @@
-const DATABASE_NAME = 'places-to-visit';
+const LOCAL_DATABASE_NAME = 'places-to-visit';
 const PLACES_STORE_NAME = 'places';
 const EXTERNAL_DATABASE_URL = 'https://places-visited-82e6a.firebaseio.com/places-to-visit/places.json';
 
@@ -8,14 +8,14 @@ const DatabaseOperations = {
 };
 
 // Open the database and create the table if it's not already there
-const dbPromise = idb.open(DATABASE_NAME, 1, (db) => {
+const dbPromise = idb.open(LOCAL_DATABASE_NAME, 1, (db) => {
     if (!db.objectStoreNames.contains(PLACES_STORE_NAME)) {
         db.createObjectStore(PLACES_STORE_NAME, { keyPath: 'id' });
     }
 });
 
 // Write a single item to specified store in the database
-function writeItemToDatabase(st, data) {
+function writeItemToLocalDatabase(st, data) {
     return dbPromise.then(db => {
         var tx = db.transaction(st, DatabaseOperations.READ_AND_WRITE);
         var store = tx.objectStore(st);
@@ -25,7 +25,7 @@ function writeItemToDatabase(st, data) {
 }
 
 // Read all items from specified store in the database
-function readAllItemsFromDatabase(st) {
+function readAllItemsFromLocalDatabase(st) {
     return dbPromise.then(db => {
         var tx = db.transaction(st, DatabaseOperations.READ_ONLY);
         var store = tx.objectStore(st);
@@ -34,7 +34,7 @@ function readAllItemsFromDatabase(st) {
 }
 
 // Read single item from specified store in the database
-function readItemFromDatabase(st, id) {
+function readItemFromLocalDatabase(st, id) {
     return dbPromise.then(db => {
         var tx = db.transaction(st, DatabaseOperations.READ_ONLY);
         var store = tx.objectStore(st);
@@ -43,7 +43,7 @@ function readItemFromDatabase(st, id) {
 }
 
 // Delete all items from specified store in the database
-function clearAllItemsFromDatabase(st) {
+function clearAllItemsFromLocalDatabase(st) {
     return dbPromise.then(db => {
         var tx = db.transaction(st, DatabaseOperations.READ_AND_WRITE);
         var store = tx.objectStore(st);
@@ -53,7 +53,7 @@ function clearAllItemsFromDatabase(st) {
 }
 
 // Delete a single item from specified store in the database
-function deleteItemFromDatabase(st, id) {
+function deleteItemFromLocalDatabase(st, id) {
     return dbPromise.then(db => {
         var tx = db.transaction(st, DatabaseOperations.READ_AND_WRITE);
         var store = tx.objectStore(st);

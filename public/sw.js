@@ -1,5 +1,5 @@
 importScripts('/src/js/idb.js');
-importScripts('/src/js/database-util.js');
+importScripts('/src/js/idb-util.js');
 
 // Caches name with versioning
 const CACHE_STATIC_NAME = 'StaticCache_v1';
@@ -14,7 +14,7 @@ const staticFiles = [ '/',
                       '/src/css/offline.css',
                       '/main.js',
                       '/src/js/idb.js',
-                      '/src/js/database-util.js',
+                      '/src/js/idb-util.js',
                       '/src/js/places.js',
                       '/src/js/material.min.js',
                       'https://fonts.googleapis.com/css?family=Roboto:400,700',
@@ -60,11 +60,11 @@ self.addEventListener('fetch', (event) => {
       event.respondWith(
           fetch(request).then(response => {
               var clonedResponse = response.clone();
-              clearAllItemsFromDatabase(PLACES_STORE_NAME).then(() => {
+              clearAllItemsFromLocalDatabase(PLACES_STORE_NAME).then(() => {
                 return clonedResponse.json();
               }).then(places => {
                   for (const place of places) {
-                    writeItemToDatabase(PLACES_STORE_NAME, place);
+                    writeItemToLocalDatabase(PLACES_STORE_NAME, place);
                   }
               });
               return response;
