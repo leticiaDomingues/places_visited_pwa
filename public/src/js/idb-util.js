@@ -1,5 +1,13 @@
+// Database name
 const LOCAL_DATABASE_NAME = 'places-to-visit';
+
+// Stores
 const PLACES_STORE_NAME = 'places';
+const PLACES_TO_SYNC_STORE_NAME = 'places-to-sync';
+const PLACES_TO_SYNC_REMOVE_STORE_NAME = 'places-to-sync-remove';
+const STORES = [ PLACES_STORE_NAME,  PLACES_TO_SYNC_STORE_NAME, PLACES_TO_SYNC_REMOVE_STORE_NAME ];
+
+// Firebase url to get data
 const EXTERNAL_DATABASE_URL = 'https://places-visited-82e6a.firebaseio.com/places-to-visit/places.json';
 
 const DatabaseOperations = {
@@ -9,8 +17,10 @@ const DatabaseOperations = {
 
 // Open the database and create the table if it's not already there
 const dbPromise = idb.open(LOCAL_DATABASE_NAME, 1, (db) => {
-    if (!db.objectStoreNames.contains(PLACES_STORE_NAME)) {
-        db.createObjectStore(PLACES_STORE_NAME, { keyPath: 'id' });
+    for (const storeName of STORES) {
+        if (!db.objectStoreNames.contains(storeName)) {
+            db.createObjectStore(storeName, { keyPath: 'id' });
+        } 
     }
 });
 

@@ -28,8 +28,15 @@ placesRef.once('value', function(snapshot) {
     });
   });
 
-// Write a single item to specified table in the external database
+// Write a single item to specified table on the external database
 function writePlaceToExternalDatabase(item) {
-    item.id = newPlaceKey++;
-    return database.ref(`${EXTERNAL_DATABASE_PLACES_REF_NAME}/${item.id}`).set(item);
+  item.id = newPlaceKey++;
+  return database.ref(`${EXTERNAL_DATABASE_PLACES_REF_NAME}/${item.id}`).set(item);
+}
+
+// Remove a single item from specified table on the external database
+function removePlaceFromExternalDatabase(item) {
+  const placeId = item.id;
+  const ref = database.ref(EXTERNAL_DATABASE_PLACES_REF_NAME).child(placeId);
+  return ref.remove();
 }

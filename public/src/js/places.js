@@ -1,8 +1,12 @@
-// Places area in DOM
+// DOM elements
 const placesArea = document.getElementById("places-area");
+const snackbar = document.getElementById("snackbar");
 
 // Places array
 let places = [];
+
+// Remove sync event name
+const REMOVE_PLACE_SYNC_EVENT_NAME = 'sync-remove-posts';
 
 // Delete and then add cards for all places in the array
 function refreshPlacesArea() {
@@ -30,8 +34,8 @@ function fetchPlacesUsingCacheThenNetworkStrategy() {
         console.log('From web: ', data);
         networkDataReceived = true;
         places = [];
-        for (let place of data) {
-          places.push(place);
+        for (let index in data) {
+          places.push(data[index]);
         }
         refreshPlacesArea();
       });
@@ -76,6 +80,19 @@ function createNewPlaceCard(place) {
   cardDescription.style.textAlign = 'center';
   cardSection.appendChild(cardDescription);
 
+  // Creating remove button
+  var cardMenu = document.createElement('div');
+  cardMenu.className = 'mdl-card__menu';
+  var removeButton = document.createElement('button');
+  removeButton.className = 'mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect';
+  removeButton.addEventListener('click', () => removePlace(place));
+  var removeIcon = document.createElement('i');
+  removeIcon.className = 'material-icons remove-icon';
+  removeIcon.innerText = 'delete';
+  removeButton.appendChild(removeIcon);
+  cardMenu.appendChild(removeButton);
+  cardSection.appendChild(cardMenu);
+
   // Adding new card to html
   placesArea.appendChild(cardSection);
 }
@@ -84,5 +101,36 @@ function createNewPlaceCard(place) {
 function goToNewPlacePage() {
   window.location = "/src/new.html";
 };
+
+// Remove a place from database through a sync event, if it's enabled
+function removePlace(place) {
+  // If background syncronization is supported by the browser, add the post to idb and create a sync event.
+  // If it's not supported, just remove the place from firebase
+  if ('serviceWorker' in navigator && 'SyncManager' in window) {
+    navigator.serviceWorker.ready.then(sw => {
+        writeItemToLocalDatabase(PLACES_TO_SYNC_REMOVE_STORE_NAME, place)
+            .then(() => { return sw.sync.register(REMOVE_PLACE_SYNC_EVENT_NAME); })
+            .then(() => showSnackBar('The place was saved for syncing and removal!'))
+            .catch(err => console.log(err));
+    });
+  } else {
+    removePlaceFromDatabase(place);
+  }
+}
+
+// Remove a place from external database
+function removePlaceFromDatabase(place) {
+  removePlaceFromExternalDatabase(place)
+    .then(() => {
+      fetchPlacesUsingCacheThenNetworkStrategy();
+      showSnackBar('Place successfully removed.');
+    }).catch((err) => console.log(err));
+}
+
+// Open material snack bar with the provided message
+function showSnackBar(message) {
+  const data = { message: message, timeout: 5000 };
+  snackbar.MaterialSnackbar.showSnackbar(data);
+}
 
 fetchPlacesUsingCacheThenNetworkStrategy();

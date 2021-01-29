@@ -3,6 +3,9 @@ const inputPlaceTitle = document.getElementById("placeTitle");
 const inputPlaceDescription = document.getElementById("placeDescription");
 const snackbar = document.getElementById("snackbar");
 
+// Sync event
+const NEW_PLACE_SYNC_EVENT_NAME = 'sync-new-posts';
+
 // If all information was provided, add the specified place to firebase db
 function addNewPlace() {
     const title = inputPlaceTitle.value;
@@ -15,8 +18,26 @@ function addNewPlace() {
     }
 
     const place = { title, description, image };
+
+    // If background syncronization is supported by the browser, add the post to idb and create a sync event.
+    // If it's not supported, just send the place to firebase
+    if ('serviceWorker' in navigator && 'SyncManager' in window) {
+        navigator.serviceWorker.ready.then(sw => {
+            place.id = new Date().toISOString();
+            writeItemToLocalDatabase(PLACES_TO_SYNC_STORE_NAME, place)
+                .then(() => { return sw.sync.register(NEW_PLACE_SYNC_EVENT_NAME); })
+                .then(() => showSnackBar('Your Post was saved for syncing!'))
+                .catch(err => console.log(err));
+        });
+    } else {
+        writePlaceToExternalDB(place);
+    }
+}
+
+// Send event to external db (firebase) to add the new place
+function writePlaceToExternalDB(place) {
     writePlaceToExternalDatabase(place)
-        .then(() => { showSnackBar("Place successfully added"); window.location = "/"})
+        .then(() => showSnackBar("Place successfully added"))
         .catch(() => showSnackBar("Error adding the place. Please, try again later."));
 }
 

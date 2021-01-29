@@ -1,9 +1,19 @@
+// IndexedDB
 importScripts('/src/js/idb.js');
 importScripts('/src/js/idb-util.js');
+
+// Firebase
+importScripts('/src/js/firebase-app.min.js');
+importScripts('/src/js/firebase-database.min.js');
+importScripts('/src/js/firebase-util.js');
 
 // Caches name with versioning
 const CACHE_STATIC_NAME = 'StaticCache_v1';
 const CACHE_DYNAMIC_NAME = 'DynamicCache_v1';
+
+// Sync events
+const NEW_PLACE_SYNC_EVENT_NAME = 'sync-new-posts';
+const REMOVE_PLACE_SYNC_EVENT_NAME = 'sync-remove-posts';
 
 // Static files of the application that will be added to the static cache
 const staticFiles = [ '/',
@@ -16,7 +26,10 @@ const staticFiles = [ '/',
                       '/src/js/idb.js',
                       '/src/js/idb-util.js',
                       '/src/js/places.js',
+                      '/src/js/firebase-util.js',
                       '/src/js/material.min.js',
+                      '/src/js/firebase-database.min.js',
+                      '/src/js/firebase-app.min.js',
                       'https://fonts.googleapis.com/css?family=Roboto:400,700',
                       'https://fonts.googleapis.com/icon?family=Material+Icons',
                       'https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css' ];
@@ -63,8 +76,11 @@ self.addEventListener('fetch', (event) => {
               clearAllItemsFromLocalDatabase(PLACES_STORE_NAME).then(() => {
                 return clonedResponse.json();
               }).then(places => {
-                  for (const place of places) {
-                    writeItemToLocalDatabase(PLACES_STORE_NAME, place);
+                  for (const placeIndex in places) {
+                    const place = places[placeIndex];
+                    if (place) {
+                      writeItemToLocalDatabase(PLACES_STORE_NAME, place);
+                    }
                   }
               });
               return response;
@@ -114,3 +130,45 @@ function deleteOldVersionCaches() {
 function cacheOnlyStrategy(request) {
   return caches.match(request).then((response) => response);
 }
+
+// Sync event listener
+self.addEventListener('sync', event => {
+  console.log('[SW] Background syncing event', event);
+
+  // Check if the triggered event is for adding a new place
+  if (event.tag === NEW_PLACE_SYNC_EVENT_NAME) {
+    console.log('[SW] Sync event to add new place');
+
+    event.waitUntil(
+      // Read the places to add from idb
+      readAllItemsFromLocalDatabase(PLACES_TO_SYNC_STORE_NAME).then(places => {
+          for (const place of places) {
+            const placeIdToDeleteFromIdb = place.id;
+            // Send the place for insertion on firebase.
+            // If the operation was successful, remove recently added place from idb
+            writePlaceToExternalDatabase(place)
+              .then(() => deleteItemFromLocalDatabase(PLACES_TO_SYNC_STORE_NAME, placeIdToDeleteFromIdb))
+              .catch(err => console.log('Error while sending data', err));
+          }
+        })
+    );
+  } 
+  // Check if the triggered event is for removing a place 
+  else if (event.tag === REMOVE_PLACE_SYNC_EVENT_NAME) {
+    console.log('[SW] Sync event to remove place');
+
+    event.waitUntil(
+      // Read the places to remove from idb
+      readAllItemsFromLocalDatabase(PLACES_TO_SYNC_REMOVE_STORE_NAME).then(places => {
+          for (const place of places) {
+            const placeIdToDeleteFromIdb = place.id;
+            // Send the place for removal on firebase.
+            // If the operation was successful, remove place from idb
+            removePlaceFromExternalDatabase(place)
+              .then(() => deleteItemFromLocalDatabase(PLACES_TO_SYNC_REMOVE_STORE_NAME, placeIdToDeleteFromIdb))
+              .catch(err => console.log('Error while sending data', err));
+          }
+        })
+    );
+  }
+});

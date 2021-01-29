@@ -21,7 +21,7 @@ label.input-custom-file input[type=file] {
 }
 
 #imagePreview {
-    width: 70%;
+    height: 180px;
     margin: auto;
     margin-bottom: 1rem;
 }
